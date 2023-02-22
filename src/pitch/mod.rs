@@ -3,12 +3,12 @@ use std::ops;
 use regex::Regex;
 use lazy_static::lazy_static;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Pitch {
     spn_idx: i32,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct PitchMotion {
     motion: i32,
 }

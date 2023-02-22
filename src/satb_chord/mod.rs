@@ -16,7 +16,24 @@ pub struct SATBMotion {
     bass: PitchMotion,
 }
 
+impl SATBChord {
+    fn verify(&self, next: &SATBChord) -> Result<(), String> {
+        let motion = self - &next;
+
+        // dummy
+        Ok(())
+    }
+}
+
 impl ops::Sub for SATBChord {
+    type Output = SATBMotion;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        &self - &rhs
+    }
+}
+
+impl ops::Sub for &SATBChord {
     type Output = SATBMotion;
 
     fn sub(self, rhs: Self) -> Self::Output {
