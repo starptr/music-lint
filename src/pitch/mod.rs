@@ -8,6 +8,11 @@ pub struct Pitch {
     spn_idx: i32,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+pub struct PitchMotion {
+    motion: i32,
+}
+
 fn parse_pitch_decomp(spn: &str) -> Result<(i32, i32, i32), String> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"^(?x)
@@ -53,10 +58,12 @@ fn pitch_decomp_to_spn_idx(pitch_decomp: (i32, i32, i32)) -> i32 {
 }
 
 impl ops::Sub for Pitch {
-    type Output = i32;
+    type Output = PitchMotion;
 
     fn sub(self, rhs: Self) -> Self::Output {
-        self.spn_idx - rhs.spn_idx
+        PitchMotion {
+            motion: self.spn_idx - rhs.spn_idx
+        }
     }
 }
 
@@ -71,6 +78,12 @@ impl FromStr for Pitch {
     }
 }
 
+impl From<i32> for PitchMotion {
+    fn from(value: i32) -> Self {
+        Self { motion: value }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -80,12 +93,12 @@ mod tests {
 
         #[test]
         fn sub_basic() {
-            assert_eq!(7, Pitch::from_str("g3").unwrap() - Pitch::from_str("c3").unwrap());
-            assert_eq!(8, Pitch::from_str("gs3").unwrap() - Pitch::from_str("c3").unwrap());
-            assert_eq!(7, Pitch::from_str("gs3").unwrap() - Pitch::from_str("cs3").unwrap());
-            assert_eq!(6, Pitch::from_str("g3").unwrap() - Pitch::from_str("cs3").unwrap());
-            assert_eq!(5, Pitch::from_str("gf3").unwrap() - Pitch::from_str("cs3").unwrap());
-            assert_eq!(9, Pitch::from_str("gs3").unwrap() - Pitch::from_str("cf3").unwrap());
+            assert_eq!(Pitch::from_str("g3").unwrap() - Pitch::from_str("c3").unwrap(), 7.into());
+            assert_eq!(Pitch::from_str("gs3").unwrap() - Pitch::from_str("c3").unwrap(), 8.into());
+            assert_eq!(Pitch::from_str("gs3").unwrap() - Pitch::from_str("cs3").unwrap(), 7.into());
+            assert_eq!(Pitch::from_str("g3").unwrap() - Pitch::from_str("cs3").unwrap(), 6.into());
+            assert_eq!(Pitch::from_str("gf3").unwrap() - Pitch::from_str("cs3").unwrap(), 5.into());
+            assert_eq!(Pitch::from_str("gs3").unwrap() - Pitch::from_str("cf3").unwrap(), 9.into());
         }
     }
 
