@@ -1,17 +1,20 @@
 use std::str::FromStr;
 use std::ops;
+use std::cmp;
 use regex::Regex;
 use lazy_static::lazy_static;
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, PartialOrd, Ord)]
 pub struct Pitch {
     spn_idx: i32,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, PartialOrd, Ord)]
 pub struct PitchMotion {
     motion: i32,
 }
+
+pub const OCTAVE: PitchMotion = PitchMotion { motion: 12 };
 
 fn parse_pitch_decomp(spn: &str) -> Result<(i32, i32, i32), String> {
     lazy_static! {
@@ -75,6 +78,12 @@ impl FromStr for Pitch {
 
         // for now, just return a dummy value
         Ok(Pitch { spn_idx: pitch_decomp_to_spn_idx(pitch_decomp) })
+    }
+}
+
+impl From<&str> for Pitch {
+    fn from(value: &str) -> Self {
+        Pitch::from_str(value).unwrap()
     }
 }
 

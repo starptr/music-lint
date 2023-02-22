@@ -1,7 +1,8 @@
-use strum_macros::EnumString;
-
 mod pitch;
 mod satb_chord;
+mod mod12;
+mod key;
+use key::Key;
 
 #[derive(Clone, Copy)]
 enum ParseState {
@@ -12,13 +13,6 @@ enum State {
     Parse(ParseState),
     Verify,
 }
-
-#[derive(EnumString)]
-enum Key {
-    C,
-    c
-}
-
 
 fn main() {
     use std::fs::File;
